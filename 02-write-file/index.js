@@ -20,6 +20,7 @@ process.on('exit', () => {
     rl.close()
 })
 
+// добавляю обработчик события при нажатии ctrl + C
 process.on('SIGINT', () => {
     exit()
 })
