@@ -7,6 +7,9 @@ const pathToSite = path.join(__dirname, 'project-dist')
 const pathToStyles = path.join(__dirname, 'styles')
 const pathToSiteStyles = path.join(pathToSite, 'style.css')
 
+
+
+
 async function generateHTML() {
     fs.mkdir(pathToSite, {recursive: true})
 // 2. Read and save the template file in a variable.
@@ -64,4 +67,39 @@ fs.readdir(pathToStyles, {withFileTypes: true})
     .catch(err => {
         console.log('Error on reading: ' + err)
     })
+
+    // 7. Use the script from task **04-copy-directory** to move the `assets` folder into the `project-dist` folder.
+
+     // Создаю папку и копирую туда все файлы
+    const pathToAssets = path.join(__dirname, 'assets');
+    const pathToSiteAssets = path.join(pathToSite, 'assets');
+
+   async function copyAssetsFolder(sourceFolder, distFolder) {
+    try {
+        await fs.mkdir(distFolder, { recursive: true });
+        const files = await fs.readdir(sourceFolder);
+
+        // !!! цикл forEach работает не корректно c await !!! Использую for ... of
+        for (let file of files) {
+            const sourceFolderFile = path.join(sourceFolder, file);
+            const distFolderFile = path.join(distFolder, file);
+            const stat = await fs.stat(sourceFolderFile);
+            
+            if (stat.isFile()) {
+                await fs.copyFile(sourceFolderFile, distFolderFile);
+            } else {
+                await copyAssetsFolder(sourceFolderFile, distFolderFile);
+            }
+        }
+        console.log('Файлы успешно скопированы');
+    } catch (err) {
+        console.log('Возникли ошибки при копировании:', err);
+    }
+}
+
+copyAssetsFolder(pathToAssets, pathToSiteAssets);
+            
+        
+    
+    
     
