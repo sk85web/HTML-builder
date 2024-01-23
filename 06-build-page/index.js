@@ -97,6 +97,26 @@ fs.readdir(pathToStyles, {withFileTypes: true})
     }
 }
 
+// Добавил функцию очистки папки assets после каждого builda
+
+async function clearFolder() {
+    try {
+        fs.readdir(pathToSiteAssets, async (err, files) => {
+            if(err) {
+                console.log('Error: ' + err)
+                return
+            }
+             if( files) {
+                 await fs.rm(pathToSiteAssets, { recursive: true });
+                 console.log('Файл успешно удален')
+            }
+         })
+    } catch (error) {
+        console.log('Ошибка удаления')
+    }
+}
+
+clearFolder()
 copyAssetsFolder(pathToAssets, pathToSiteAssets);
             
         
