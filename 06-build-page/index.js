@@ -26,11 +26,13 @@ async function generateHTML() {
     }
 })
 
-// 4. Replace template tags with the content of component files. ---> Ошибка чтения файла, надо разбираться
-    htmlComponents.forEach(file => {
-    const readComponentsFile = fs.readFile(path.join(__dirname, 'components', file), 'utf-8', )
-       htmlTemplate += readComponentsFile
-})
+// 4. Replace template tags with the content of component files. 
+    for(const file of htmlComponents) {
+        const readComponentsFile = await fs.readFile(path.join(__dirname, 'components', file), 'utf-8', )
+        const templateName = file.slice(0, file.indexOf('.'))
+       htmlTemplate = htmlTemplate.replace(`{{${templateName}}}`, readComponentsFile)
+    }
+
     await fs.writeFile(path.join(pathToSite, 'index.html'), htmlTemplate);
 }
 
