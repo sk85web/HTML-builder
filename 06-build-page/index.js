@@ -79,6 +79,9 @@ fs.readdir(pathToStyles, {withFileTypes: true})
         await fs.mkdir(distFolder, { recursive: true });
         const files = await fs.readdir(sourceFolder);
 
+        // Удаляю папку перед копированием файлов
+        clearFolder()  
+
         // !!! цикл forEach работает не корректно c await !!! Использую for ... of
         for (let file of files) {
             const sourceFolderFile = path.join(sourceFolder, file);
@@ -116,9 +119,9 @@ async function clearFolder() {
     }
 }
 
-clearFolder()
+
 copyAssetsFolder(pathToAssets, pathToSiteAssets);
-            
+          
         
     
     
